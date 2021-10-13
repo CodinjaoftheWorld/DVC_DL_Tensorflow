@@ -24,4 +24,7 @@ touch dvc.yaml setup.py README.md src/__init__.py src/utils.py params.yaml confi
 ```
 
 
-
+### freezing the requiments.txt with versions
+```bash
+pip freeze > requirements.txt 
+```
