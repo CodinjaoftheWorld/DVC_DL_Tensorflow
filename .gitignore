@@ -133,4 +133,4 @@ dmypy.json
 config/secrets.yaml
 
 # ignoring data
-.data/
+data/
