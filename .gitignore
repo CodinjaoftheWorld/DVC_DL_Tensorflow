@@ -131,3 +131,6 @@ dmypy.json
 
 # ignoring secrets.yaml
 config/secrets.yaml
+
+# ignoring data
+.data/
