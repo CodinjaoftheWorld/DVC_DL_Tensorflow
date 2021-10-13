@@ -30,3 +30,8 @@ touch dvc.yaml setup.py README.md src/__init__.py src/utils.py params.yaml confi
 ```bash
 pip freeze > requirements.txt 
 ```
+
+### command for isntalling src as package
+```bash
+pip install -e .
+```
