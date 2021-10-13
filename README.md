@@ -19,6 +19,7 @@ conda activate ./env
 git init
 dvc init
 ```
+
 ### Create empty files
 ```bash
 mkdir -p src/utils config
