@@ -9,7 +9,8 @@ import logging
 
 logging_str = "[%(asctime)s: %(levelname)s: %(module)s]: %(message)s"
 log_dir = "logs"
-create_directory([log_dir])
+# create_directory([log_dir])
+os.makedirs(log_dir, exist_ok=True)
 logging.basicConfig(filename= os.path.join(log_dir, "running_logs.log"), level=logging.INFO, format=logging_str, filemode="a")
 
 
@@ -42,9 +43,9 @@ if __name__ == '__main__':
     parsed_args = args.parse_args()
 
     try:
-        logging.info("stage 01 started")
+        logging.info(">>>>>>>>>>>>> stage 01 started >>>>>>>>>>>>>>>")
         get_data(config_path=parsed_args.config)
-        logging.info("stage 01 complete and all the data is saved in local")
+        logging.info("<<<<< stage 01 complete and all the data is saved in local <<<<<\n")
     except Exception as e:
         logging.exception(e)
         raise e
