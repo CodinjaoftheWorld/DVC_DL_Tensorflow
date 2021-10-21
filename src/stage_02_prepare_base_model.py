@@ -1,6 +1,7 @@
 from src.utils.all_utils import read_yaml, create_directory
+from src.utils.models import get_VGG_16_model, prepare_model
 import argparse
-import pandas as pd 
+import io
 import os
 import shutil
 from tqdm import tqdm
@@ -15,12 +16,12 @@ logging.basicConfig(filename= os.path.join(log_dir, "running_logs.log"), level=l
 
 
 
-
 def prepare_base_model(config_path, params_path):
     config = read_yaml(config_path)
     params = read_yaml(params_path)
 
-    artifacts_dir = config["artifacts"]["ARTIFACTS_DIR"]
+    artifacts = config["artifacts"]
+    artifacts_dir = artifacts["ARTIFACTS_DIR"]
     
     base_model_dir = config["artifacts"]["BASE_MODEL_DIR"]
     base_model_name = config["artifacts"]["BASE_MODEL_NAME"]
@@ -31,6 +32,30 @@ def prepare_base_model(config_path, params_path):
     base_model_path = os.path.join(base_model_dir_path, base_model_name)
 
     model = get_VGG_16_model(input_shape=params["IMAGE_SIZE"], model_path=base_model_path)
+
+    full_model = prepare_model(
+        model, 
+        CLASSES=params["CLASSES"],
+        freeze_all=False,
+        freeze_till=1,
+        learning_rate=params["LEARNING_RATE"],
+    )
+
+    upated_base_model_path = os.path.join(
+        base_model_dir_path, 
+        artifacts["UPDATED_BASE_MODEL_NAME"]
+    )
+
+    def _log_model_summary(model):
+        with io.StringIO() as stream:
+            model.summary(print_fn=lambda x: stream.write(f"{x}\n"))
+            summary_str = stream.getvalue()
+        return summary_str
+
+
+    logging.info(f"full model summary: \n{_log_model_summary(full_model)}")
+
+    full_model.save(upated_base_model_path)
 
 
 if __name__ == '__main__':
@@ -43,7 +68,7 @@ if __name__ == '__main__':
 
     try:
         logging.info(">>>>>>>>>>>>> stage 02 started >>>>>>>>>>>>>>>")
-        get_data(config_path=parsed_args.config, params_path=parsed_args.params)
+        prepare_base_model(config_path=parsed_args.config, params_path=parsed_args.params)
         logging.info("<<<<< stage 02 complete! base model is created <<<<<\n")
     except Exception as e:
         logging.exception(e)
