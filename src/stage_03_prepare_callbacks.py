@@ -1,8 +1,6 @@
 from src.utils.all_utils import read_yaml, create_directory
-from src.utils.models import get_VGG_16_model, prepare_model
 from src.utils.callbacks import create_and__save_tensorboard_callback, create_and__save_checkpoint_callback
 import argparse
-import io
 import os
 import shutil
 from tqdm import tqdm
