@@ -15,7 +15,7 @@ def create_and__save_tensorboard_callback(callbacks_dir, tensorboard_log_dir):
 
     tb_callback_filepath = os.path.join(callbacks_dir, "tensorboard_cb.cb")
     joblib.dump(tensorboard_callbacks, tb_callback_filepath)
-    loggign.info(f"tensorboard callback is being saved at {tb_callback_filepath}")
+    logging.info(f"tensorboard callback is being saved at {tb_callback_filepath}")
 
 
 
@@ -28,4 +28,4 @@ def create_and__save_checkpoint_callback(callbacks_dir, checkpoint_dir):
 
     ckpt_callback_filepath = os.path.join(callbacks_dir, "checkpoint_cb.cb")
     joblib.dump(checkpoint_callback, ckpt_callback_filepath)
-    loggign.info(f"checkpoint callback is being saved at {ckpt_callback_filepath}")
+    logging.info(f"checkpoint callback is being saved at {ckpt_callback_filepath}")
