@@ -2,7 +2,7 @@ import tensorflow as tf
 import os
 import joblib
 import logging
-
+from src.utils.all_utils import get_timestamp
 
 
 def get_VGG_16_model(input_shape, model_path):
@@ -53,3 +53,11 @@ def load_full_model(untrained_full_model_path):
     model = tf.keras.models.load_model(untrained_full_model_path)
     logging.info(f"untrained model is read from: {untrained_full_model_path}")
     return model
+
+
+def get_unique_path_to_save_model(train_model_dir, model_name="model"):
+    timestamp = get_timestamp(model_name)
+    unique_model_name = f"{timestamp}.h5"
+    unique_model_path = os.path.join(train_model_dir, unique_model_name)
+
+    return unique_model_path
