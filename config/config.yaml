@@ -7,7 +7,7 @@ artifacts:
   UPDATED_BASE_MODEL_NAME: updated_VGG16_base_model.h5
   CHECKPOINT_DIR: checkpoint
   BASE_LOG_DIR: base_model_dir
-  TENSORBORD_ROOT_LOG_DIR: tesnsotboard_log_dir
+  TENSORBORD_ROOT_LOG_DIR: tensorboard_log_dir
   CALLBACKS_DIR: callbacks
   DATA_DIR: data
 
