@@ -1,12 +1,15 @@
 from src.utils.all_utils import read_yaml, create_directory
-from src.utils.models import load_full_model, get_unique_path_to_save_model
+from src.utils.models import load_trained_model, true_classes, class_labels, report
 from src.utils.callbacks import get_callbacks
-from src.utils.data_management import train_valid_generator
+from src.utils.data_management import test_gen
+from sklearn.metrics import classification_report, confusion_matrix
 import argparse
 import os
 import shutil
-
+import tensorflow as tf
 import logging
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 logging_str = "[%(asctime)s: %(levelname)s: %(module)s]: %(message)s"
@@ -22,7 +25,36 @@ def evaluate(config_path, params_path):
     artifacts = config["artifacts"]
     artifacts_dir = artifacts["ARTIFACTS_DIR"]
 
+    trained_model_path = os.path.join(artifacts_dir, artifacts["TRAINED_MODEL_DIR"])
+    
+    full_trianed_model_path = "".join([os.path.join(trained_model_path, h5_file) for h5_file in os.listdir(trained_model_path) if h5_file.endswith(".h5")])
 
+    model = load_trained_model(full_trianed_model_path)
+
+    callback_dir_path = os.path.join(artifacts_dir, artifacts["CALLBACKS_DIR"])
+    callbacks = get_callbacks(callback_dir_path)   
+
+    testing_generator = test_gen(
+        test_dir = artifacts["TEST_DIR"], 
+        IMAGE_SIZE = tuple(params["IMAGE_SIZE"][:-1]), 
+        TEST_BATCH_SIZE = params["TEST_BATCH_SIZE"]
+        )
+    testing_generator.reset()
+
+    labels = ["cat", "dog"]
+    predictions = model.predict(testing_generator)
+    predictions = np.argmax(predictions, axis=1)
+
+    trueClasses = true_classes(testing_generator)
+    classLabels = class_labels(testing_generator)   
+    
+    # classification report
+    cls_report = report(trueClasses, classLabels, predictions)
+    logging.info(f"Classification Report: \n{cls_report}")
+
+    # confusion matrix
+    cm = confusion_matrix(trueClasses, predictions)
+    logging.info(f"Confusion Matrix: \n{cm}")
 
 
 if __name__ == '__main__':

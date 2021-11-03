@@ -3,6 +3,7 @@ import os
 import joblib
 import logging
 from src.utils.all_utils import get_timestamp
+from sklearn.metrics import classification_report
 
 
 def get_VGG_16_model(input_shape, model_path):
@@ -61,3 +62,22 @@ def get_unique_path_to_save_model(train_model_dir, model_name="model"):
     unique_model_path = os.path.join(train_model_dir, unique_model_name)
 
     return unique_model_path
+
+def load_trained_model(trained_full_model_path):
+    model = tf.keras.models.load_model(trained_full_model_path)
+    logging.info(f"trained model is read from: {trained_full_model_path}")
+    return model
+
+def true_classes(testing_generator):
+    return testing_generator.classes
+
+
+def class_labels(testing_generator):
+    return list(testing_generator.class_indices.keys())
+
+
+def report(trueClasses, classLabels, predictions):
+    return classification_report(trueClasses, predictions, target_names=classLabels)
+  
+
+

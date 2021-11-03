@@ -47,3 +47,25 @@ def train_valid_generator(data_dir, IMAGE_SIZE, BATCH_SIZE, do_data_augmentation
 
     logging.info(f"train and valid generator are created")
     return train_generator, valid_generator
+
+
+
+def test_gen(test_dir, IMAGE_SIZE, TEST_BATCH_SIZE):
+
+    test_datagenerator = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255)
+
+    test_generator = test_datagenerator.flow_from_directory(
+        directory=test_dir,
+        target_size=IMAGE_SIZE,
+        shuffle=False,
+        batch_size=TEST_BATCH_SIZE
+        )
+
+    # test_dataset = tf.keras.utils.image_dataset_from_directory(test_dir,
+    #                                                         shuffle=False,
+    #                                                         batch_size=TEST_BATCH_SIZE,
+    #                                                         image_size=IMAGE_SIZE)
+
+    logging.info(f"$$$$$$$$$  testing generator is created  $$$$$$$$$$")
+    return test_generator
+
