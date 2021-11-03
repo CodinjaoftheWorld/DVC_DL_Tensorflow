@@ -134,3 +134,4 @@ config/secrets.yaml
 
 # ignoring data
 data/
+test_data/
