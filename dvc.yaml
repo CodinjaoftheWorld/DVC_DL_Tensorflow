@@ -9,6 +9,7 @@ stages:
       - data/cat
       - data/dog
 
+
   prepare_base_model: 
     cmd: python src/stage_02_prepare_base_model.py --config=config/config.yaml --params=params.yaml
     deps: 
@@ -57,3 +58,24 @@ stages:
       - EPOCHS
     outs:
       - artifacts/model
+  
+  evaluate: 
+    cmd: python src/stage_05_evaluate.py --config=config/config.yaml --params=params.yaml
+    deps: 
+      - src/stage_05_evaluate.py
+      - src/utils/all_utils.py
+      - src/utils/models.py
+      - src/utils/data_management.py
+      - config/config.yaml
+      - src/utils/callbacks.py
+      - params.yaml
+      - test_data/cat
+      - test_data/dog
+      - artifacts/model
+      - artifacts/callbacks/checkpoint_cb.cb
+      - artifacts/callbacks/tensorboard_cb.cb
+    params:
+      - IMAGE_SIZE
+      - TEST_BATCH_SIZE
+    outs:
+      - logs/running_logs.log
